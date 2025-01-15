@@ -21,6 +21,8 @@ from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.conf import settings  # Importar configuraciones
+from django.conf.urls.static import static  # Importar para servir archivos estáticos y multimedia
 from apps.pdf_measurement.views import download_report
 from apps.notify_service.views import NotificationListView
 
@@ -47,7 +49,7 @@ urlpatterns = [
     path('api/measurements/', include('apps.measurements.urls')),
     path('comparations/', include('apps.comparations.urls')),
     path('api/measurements/report/download/', download_report, name='download_report'),
-    #notifications
+    # Notifications
     path('api/notifications/general/', include('apps.notifications.urls')),
     path('api/notifications/service/', include('apps.notify_service.urls')),   
     # Rutas de Swagger
@@ -58,3 +60,7 @@ urlpatterns = [
     # Ruta de Tesseract
     path('tesseract/', include('apps.tesseract.urls')),
 ]
+
+# Configuración para servir archivos multimedia en desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
